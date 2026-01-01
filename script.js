@@ -396,21 +396,21 @@ class Game2048 {
         });
         
         // Touch events for mobile
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchEndX = 0;
-        let touchEndY = 0;
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.touchEndX = 0;
+        this.touchEndY = 0;
         
         const gameContainer = document.getElementById('game-container');
         
         gameContainer.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
+            this.touchStartX = e.touches[0].clientX;
+            this.touchStartY = e.touches[0].clientY;
         });
         
         gameContainer.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].clientX;
-            touchEndY = e.changedTouches[0].clientY;
+            this.touchEndX = e.changedTouches[0].clientX;
+            this.touchEndY = e.changedTouches[0].clientY;
             this.handleSwipe();
         });
         
@@ -425,8 +425,8 @@ class Game2048 {
     }
     
     handleSwipe() {
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
+        const deltaX = this.touchEndX - this.touchStartX;
+        const deltaY = this.touchEndY - this.touchStartY;
         
         // Determine swipe direction
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
@@ -460,11 +460,24 @@ class MatrixRain {
         this.speed = 0.3; // Controls the speed of the rain
         this.counters = []; // Track speed for each column
         
+        // Check current theme and update visibility
+        this.updateVisibility();
+        
         this.resizeCanvas();
         this.initDrops();
         this.animate();
         
         window.addEventListener('resize', () => this.resizeCanvas());
+    }
+    
+    updateVisibility() {
+        // Check current theme from localStorage
+        const currentTheme = localStorage.getItem('currentTheme') || 'tech';
+        if (currentTheme === 'classic') {
+            this.canvas.style.display = 'none';
+        } else {
+            this.canvas.style.display = 'block';
+        }
     }
     
     resizeCanvas() {
@@ -484,6 +497,15 @@ class MatrixRain {
     }
     
     animate() {
+        // Check if we should render the matrix rain
+        const currentTheme = localStorage.getItem('currentTheme') || 'tech';
+        if (currentTheme === 'classic') {
+            // If classic theme, clear the canvas and don't draw anything
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            requestAnimationFrame(() => this.animate());
+            return;
+        }
+        
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
@@ -521,14 +543,21 @@ class ThemeManager {
     constructor() {
         this.currentTheme = localStorage.getItem('currentTheme') || 'tech';
         this.currentMode = localStorage.getItem('currentMode') || 'auto';
+        this.matrixRain = null;
         this.initializeTheme();
         this.initializeMode();
         this.bindEvents();
     }
     
+    setMatrixRain(matrixRain) {
+        this.matrixRain = matrixRain;
+        this.updateMatrixRainVisibility();
+    }
+    
     initializeTheme() {
-        document.documentElement.className = this.currentTheme === 'classic' ? 'theme-classic' : '';
+        document.documentElement.className = this.getFullClassName();
         document.getElementById('theme-select').value = this.currentTheme;
+        this.updateMatrixRainVisibility();
     }
     
     initializeMode() {
@@ -539,11 +568,23 @@ class ThemeManager {
     switchTheme(theme) {
         this.currentTheme = theme;
         localStorage.setItem('currentTheme', theme);
-        
-        if (theme === 'classic') {
-            document.documentElement.className = this.getFullClassName();
+        document.documentElement.className = this.getFullClassName();
+        this.updateMatrixRainVisibility();
+    }
+    
+    updateMatrixRainVisibility() {
+        if (this.matrixRain && this.matrixRain.updateVisibility) {
+            this.matrixRain.updateVisibility();
         } else {
-            document.documentElement.className = this.getFullClassName();
+            // Fallback if matrixRain instance is not available
+            const matrixCanvas = document.getElementById('matrix');
+            if (matrixCanvas) {
+                if (this.currentTheme === 'classic') {
+                    matrixCanvas.style.display = 'none';
+                } else {
+                    matrixCanvas.style.display = 'block';
+                }
+            }
         }
     }
     
@@ -600,8 +641,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         hideLoadingScreen();
         // Initialize game components after loading screen is hidden
-        new MatrixRain();
-        new Game2048();
-        new ThemeManager();
+        const themeManager = new ThemeManager();
+        const matrixRain = new MatrixRain();
+        const game2048 = new Game2048();
+        
+        // Pass matrixRain instance to themeManager for theme changes
+        themeManager.setMatrixRain(matrixRain);
     }, 3000);
 });
