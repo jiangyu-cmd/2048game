@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2048 Game</title>
+    <title>2048游戏</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,8 +34,14 @@
             </div>
         </header>
         <p class="subtitle">Join the numbers and get to the 2048 tile!</p>
-        <div class="control-buttons">
+        <!-- New Game and Pause buttons -->
+        <div class="buttons-container">
             <button id="new-game" class="new-game-btn">New Game</button>
+            <button id="pause-game" class="pause-game-btn">暂停</button>
+        </div>
+        
+        <!-- Theme, Mode, and Language selects -->
+        <div class="select-container">
             <div class="theme-switch">
                 <label for="theme-select">Theme:</label>
                 <select id="theme-select" class="theme-select">
@@ -51,6 +57,13 @@
                     <option value="mobile">Mobile</option>
                 </select>
             </div>
+            <div class="language-switch">
+                <label for="language-select">Language:</label>
+                <select id="language-select" class="language-select">
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                </select>
+            </div>
         </div>
         <div id="game-container" class="game-container">
             <div id="game-grid" class="game-grid">
@@ -62,6 +75,23 @@
                 <h2>Game Over!</h2>
                 <p>Your final score: <span id="final-score">0</span></p>
                 <button id="restart-game" class="restart-btn">Try Again</button>
+            </div>
+        </div>
+        <!-- Start Game Overlay -->
+        <div class="game-overlay" id="start-game-overlay">
+            <div class="game-over-message">
+                <button id="start-game" class="start-game-btn">开始游戏</button>
+            </div>
+        </div>
+        <!-- Pause Menu Overlay -->
+        <div class="game-overlay" id="pause-menu-overlay">
+            <div class="game-over-message">
+                <h2>游戏暂停</h2>
+                <div class="pause-buttons">
+                    <button id="resume-game" class="pause-btn resume-btn">继续游戏</button>
+                    <button id="restart-game-pause" class="pause-btn restart-btn">重新开始</button>
+                    <button id="exit-game" class="pause-btn exit-btn">退出游戏</button>
+                </div>
             </div>
         </div>
         <div class="how-to-play">
