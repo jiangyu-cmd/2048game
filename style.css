@@ -184,6 +184,40 @@ h1 {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* New container for theme, mode, and language selects */
+.select-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    padding: 0 5px;
+}
+
+/* Style for new game and pause buttons container */
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 10px;
+    width: 100%;
+}
+
+.buttons-container button {
+    flex: 1;
+    min-width: 120px;
+    max-width: 200px;
+    height: 45px;
+    padding: 8px 12px;
+    font-size: 16px;
 }
 
 .new-game-btn:hover {
@@ -191,49 +225,62 @@ h1 {
     box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
 }
 
-.theme-switch, .mode-switch {
+.theme-switch, .mode-switch, .language-switch {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
+    flex-shrink: 1;
+    min-width: 0;
 }
 
-.theme-switch label, .mode-switch label {
+.theme-switch label, .mode-switch label, .language-switch label {
     color: var(--text-color);
     font-weight: bold;
     text-shadow: 0 0 5px var(--primary-color);
+    white-space: nowrap;
+    font-size: 14px;
+    width: 50px;
+    text-align: right;
+    flex-shrink: 0;
 }
 
-.theme-select, .mode-select {
+.theme-select, .mode-select, .language-select {
     background-color: rgba(0, 240, 255, 0.2);
     color: var(--text-color);
     border: 1px solid var(--border-color);
-    padding: 8px 12px;
+    padding: 6px 8px;
     border-radius: 3px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
     text-shadow: 0 0 5px var(--primary-color);
+    min-width: 90px;
+    width: 110px;
+    flex-shrink: 1;
 }
 
-.theme-select option, .mode-select option {
+.theme-select option, .mode-select option, .language-select option {
     background-color: rgba(0, 0, 0, 0.8);
     color: var(--text-color);
 }
 
 /* Classic theme styles for theme switch */
-.theme-classic .theme-switch label, .theme-classic .mode-switch label {
+.theme-classic .theme-switch label, .theme-classic .mode-switch label, .theme-classic .language-switch label {
     text-shadow: none;
+    color: var(--text-color);
 }
 
-.theme-classic .theme-select, .theme-classic .mode-select {
+.theme-classic .theme-select, .theme-classic .mode-select, .theme-classic .language-select {
     background-color: #8f7a66;
     color: #fff;
     border: none;
     box-shadow: none;
     text-shadow: none;
+    width: 110px;
+    min-width: 90px;
 }
 
-.theme-classic .theme-select option, .theme-classic .mode-select option {
+.theme-classic .theme-select option, .theme-classic .mode-select option, .theme-classic .language-select option {
     background-color: #8f7a66;
     color: #fff;
 }
@@ -441,6 +488,125 @@ h1 {
 .restart-btn:hover {
     background-color: rgba(0, 240, 255, 0.3);
     box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+.start-game-btn {
+    background-color: rgba(0, 240, 255, 0.2);
+    color: #00f0ff;
+    border: 1px solid #00f0ff;
+    padding: 20px 40px;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    text-shadow: 0 0 10px #00f0ff;
+    width: 200px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.start-game-btn:hover {
+    background-color: rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    transform: scale(1.05);
+}
+
+/* Adjust start game overlay message */
+#start-game-overlay .game-over-message {
+    padding: 40px 60px;
+    border-radius: 8px;
+    min-width: 300px;
+    max-width: 90vw;
+}
+
+/* Pause button styles */
+.pause-game-btn {
+    background-color: rgba(0, 240, 255, 0.2);
+    color: #00f0ff;
+    border: 1px solid #00f0ff;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    text-shadow: 0 0 5px #00f0ff;
+}
+
+.pause-game-btn:hover {
+    background-color: rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+/* Pause menu styles */
+#pause-menu-overlay .game-over-message {
+    padding: 40px 60px;
+    border-radius: 8px;
+    min-width: 300px;
+    max-width: 90vw;
+    text-align: center;
+}
+
+.pause-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.pause-btn {
+    background-color: rgba(0, 240, 255, 0.2);
+    color: #00f0ff;
+    border: 1px solid #00f0ff;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    text-shadow: 0 0 5px #00f0ff;
+    width: 100%;
+    min-width: 200px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.pause-btn:hover {
+    background-color: rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.pause-btn.resume-btn {
+    background-color: rgba(0, 200, 100, 0.2);
+    border-color: #00c864;
+    box-shadow: 0 0 10px rgba(0, 200, 100, 0.3);
+    text-shadow: 0 0 5px #00c864;
+}
+
+.pause-btn.resume-btn:hover {
+    background-color: rgba(0, 200, 100, 0.3);
+    box-shadow: 0 0 15px rgba(0, 200, 100, 0.5);
+}
+
+.pause-btn.exit-btn {
+    background-color: rgba(200, 80, 80, 0.2);
+    border-color: #c85050;
+    box-shadow: 0 0 10px rgba(200, 80, 80, 0.3);
+    text-shadow: 0 0 5px #c85050;
+}
+
+.pause-btn.exit-btn:hover {
+    background-color: rgba(200, 80, 80, 0.3);
+    box-shadow: 0 0 15px rgba(200, 80, 80, 0.5);
 }
 
 .how-to-play {
@@ -699,6 +865,72 @@ h1 {
     background-color: #9f8b77;
 }
 
+.theme-classic .start-game-btn {
+    background-color: #8f7a66;
+    color: #fff;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.theme-classic .start-game-btn:hover {
+    background-color: #9f8b77;
+    box-shadow: none;
+    transform: scale(1.05);
+}
+
+/* Classic theme pause button styles */
+.theme-classic .pause-game-btn {
+    background-color: #8f7a66;
+    color: #fff;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.theme-classic .pause-game-btn:hover {
+    background-color: #9f8b77;
+    box-shadow: none;
+}
+
+/* Classic theme pause menu styles */
+.theme-classic #pause-menu-overlay .game-over-message {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: var(--text-color);
+    border: none;
+    box-shadow: none;
+}
+
+.theme-classic .pause-btn {
+    background-color: #8f7a66;
+    color: #fff;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.theme-classic .pause-btn:hover {
+    background-color: #9f8b77;
+    box-shadow: none;
+    transform: scale(1.05);
+}
+
+.theme-classic .pause-btn.resume-btn {
+    background-color: #6f9a50;
+}
+
+.theme-classic .pause-btn.resume-btn:hover {
+    background-color: #7faa60;
+}
+
+.theme-classic .pause-btn.exit-btn {
+    background-color: #a56757;
+}
+
+.theme-classic .pause-btn.exit-btn:hover {
+    background-color: #b57767;
+}
+
 .theme-classic .how-to-play {
     color: var(--text-color);
     text-shadow: none;
@@ -925,10 +1157,21 @@ h1 {
     margin-bottom: 10px !important;
 }
 
-.mode-mobile .control-buttons {
+.mode-mobile .buttons-container {
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 10px !important;
+}
+
+.mode-mobile .select-container {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.mode-mobile .theme-switch, .mode-mobile .mode-switch, .mode-mobile .language-switch {
+    justify-content: center !important;
+    width: 100% !important;
 }
 
 .mode-mobile .new-game-btn {
@@ -948,7 +1191,12 @@ h1 {
 }
 
 .mode-mobile .game-container {
-    padding: 10px !important;
+    padding: 15px !important;
+    margin: 0 auto !important;
+    max-width: 90vw !important;
+    width: fit-content !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Adjust tile sizes and fonts for mobile mode */
@@ -971,25 +1219,25 @@ h1 {
 }
 
 /* Adjust tile positions for mobile mode */
-.mode-mobile .tile-position-0-0 { top: 10px !important; left: 10px !important; }
-.mode-mobile .tile-position-0-1 { top: 10px !important; left: 90px !important; }
-.mode-mobile .tile-position-0-2 { top: 10px !important; left: 170px !important; }
-.mode-mobile .tile-position-0-3 { top: 10px !important; left: 250px !important; }
+.mode-mobile .tile-position-0-0 { top: 15px !important; left: 15px !important; }
+.mode-mobile .tile-position-0-1 { top: 15px !important; left: 95px !important; }
+.mode-mobile .tile-position-0-2 { top: 15px !important; left: 175px !important; }
+.mode-mobile .tile-position-0-3 { top: 15px !important; left: 255px !important; }
 
-.mode-mobile .tile-position-1-0 { top: 90px !important; left: 10px !important; }
-.mode-mobile .tile-position-1-1 { top: 90px !important; left: 90px !important; }
-.mode-mobile .tile-position-1-2 { top: 90px !important; left: 170px !important; }
-.mode-mobile .tile-position-1-3 { top: 90px !important; left: 250px !important; }
+.mode-mobile .tile-position-1-0 { top: 95px !important; left: 15px !important; }
+.mode-mobile .tile-position-1-1 { top: 95px !important; left: 95px !important; }
+.mode-mobile .tile-position-1-2 { top: 95px !important; left: 175px !important; }
+.mode-mobile .tile-position-1-3 { top: 95px !important; left: 255px !important; }
 
-.mode-mobile .tile-position-2-0 { top: 170px !important; left: 10px !important; }
-.mode-mobile .tile-position-2-1 { top: 170px !important; left: 90px !important; }
-.mode-mobile .tile-position-2-2 { top: 170px !important; left: 170px !important; }
-.mode-mobile .tile-position-2-3 { top: 170px !important; left: 250px !important; }
+.mode-mobile .tile-position-2-0 { top: 175px !important; left: 15px !important; }
+.mode-mobile .tile-position-2-1 { top: 175px !important; left: 95px !important; }
+.mode-mobile .tile-position-2-2 { top: 175px !important; left: 175px !important; }
+.mode-mobile .tile-position-2-3 { top: 175px !important; left: 255px !important; }
 
-.mode-mobile .tile-position-3-0 { top: 250px !important; left: 10px !important; }
-.mode-mobile .tile-position-3-1 { top: 250px !important; left: 90px !important; }
-.mode-mobile .tile-position-3-2 { top: 250px !important; left: 170px !important; }
-.mode-mobile .tile-position-3-3 { top: 250px !important; left: 250px !important; }
+.mode-mobile .tile-position-3-0 { top: 255px !important; left: 15px !important; }
+.mode-mobile .tile-position-3-1 { top: 255px !important; left: 95px !important; }
+.mode-mobile .tile-position-3-2 { top: 255px !important; left: 175px !important; }
+.mode-mobile .tile-position-3-3 { top: 255px !important; left: 255px !important; }
 
 .mode-mobile .how-to-play {
     font-size: 13px !important;
@@ -1041,10 +1289,21 @@ h1 {
         margin-bottom: 10px;
     }
     
-    .control-buttons {
+    .buttons-container {
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
+    }
+    
+    .select-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .theme-switch, .mode-switch, .language-switch {
+        justify-content: center;
+        width: 100%;
     }
     
     .new-game-btn {
@@ -1064,7 +1323,12 @@ h1 {
     }
     
     .game-container {
-        padding: 10px;
+        padding: 15px;
+        margin: 0 auto;
+        max-width: 90vw;
+        width: fit-content;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
     
     /* Adjust tile sizes and fonts for mobile */
@@ -1087,25 +1351,25 @@ h1 {
     }
     
     /* Adjust tile positions for mobile */
-    .tile-position-0-0 { top: 10px; left: 10px; }
-    .tile-position-0-1 { top: 10px; left: 90px; }
-    .tile-position-0-2 { top: 10px; left: 170px; }
-    .tile-position-0-3 { top: 10px; left: 250px; }
+    .tile-position-0-0 { top: 15px; left: 15px; }
+    .tile-position-0-1 { top: 15px; left: 95px; }
+    .tile-position-0-2 { top: 15px; left: 175px; }
+    .tile-position-0-3 { top: 15px; left: 255px; }
     
-    .tile-position-1-0 { top: 90px; left: 10px; }
-    .tile-position-1-1 { top: 90px; left: 90px; }
-    .tile-position-1-2 { top: 90px; left: 170px; }
-    .tile-position-1-3 { top: 90px; left: 250px; }
+    .tile-position-1-0 { top: 95px; left: 15px; }
+    .tile-position-1-1 { top: 95px; left: 95px; }
+    .tile-position-1-2 { top: 95px; left: 175px; }
+    .tile-position-1-3 { top: 95px; left: 255px; }
     
-    .tile-position-2-0 { top: 170px; left: 10px; }
-    .tile-position-2-1 { top: 170px; left: 90px; }
-    .tile-position-2-2 { top: 170px; left: 170px; }
-    .tile-position-2-3 { top: 170px; left: 250px; }
+    .tile-position-2-0 { top: 175px; left: 15px; }
+    .tile-position-2-1 { top: 175px; left: 95px; }
+    .tile-position-2-2 { top: 175px; left: 175px; }
+    .tile-position-2-3 { top: 175px; left: 255px; }
     
-    .tile-position-3-0 { top: 250px; left: 10px; }
-    .tile-position-3-1 { top: 250px; left: 90px; }
-    .tile-position-3-2 { top: 250px; left: 170px; }
-    .tile-position-3-3 { top: 250px; left: 250px; }
+    .tile-position-3-0 { top: 255px; left: 15px; }
+    .tile-position-3-1 { top: 255px; left: 95px; }
+    .tile-position-3-2 { top: 255px; left: 175px; }
+    .tile-position-3-3 { top: 255px; left: 255px; }
     
     .how-to-play {
         font-size: 13px;
