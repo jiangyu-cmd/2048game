@@ -5,11 +5,16 @@ class Game2048 {
         this.score = 0;
         this.bestScore = localStorage.getItem('bestScore') ? parseInt(localStorage.getItem('bestScore')) : 0;
         this.gameOver = false;
+        this.isPaused = false;
         this.lastMoveChanged = false;
         
-        this.initializeGrid();
         this.bindEvents();
         this.updateScores();
+        this.showStartGame();
+    }
+    
+    startGame() {
+        this.initializeGrid();
     }
     
     initializeGrid() {
@@ -197,7 +202,7 @@ class Game2048 {
     }
     
     move(direction) {
-        if (this.gameOver) return;
+        if (this.gameOver || this.isPaused) return;
         
         this.lastMoveChanged = false;
         
@@ -366,10 +371,49 @@ class Game2048 {
         document.getElementById('game-overlay').style.display = 'none';
     }
     
+    showStartGame() {
+        document.getElementById('start-game-overlay').style.display = 'flex';
+    }
+    
+    hideStartGame() {
+        document.getElementById('start-game-overlay').style.display = 'none';
+    }
+    
+    showPauseMenu() {
+        document.getElementById('pause-menu-overlay').style.display = 'flex';
+        this.isPaused = true;
+    }
+    
+    hidePauseMenu() {
+        document.getElementById('pause-menu-overlay').style.display = 'none';
+        this.isPaused = false;
+    }
+    
+    pauseGame() {
+        if (!this.gameOver && !this.isPaused) {
+            this.showPauseMenu();
+        }
+    }
+    
+    resumeGame() {
+        this.hidePauseMenu();
+    }
+    
     newGame() {
         this.score = 0;
         this.gameOver = false;
+        this.isPaused = false;
+        this.hidePauseMenu();
         this.initializeGrid();
+    }
+    
+    exitGame() {
+        // Reset game state and show start game screen
+        this.score = 0;
+        this.gameOver = false;
+        this.isPaused = false;
+        this.hidePauseMenu();
+        this.showStartGame();
     }
     
     bindEvents() {
@@ -421,6 +465,32 @@ class Game2048 {
         
         document.getElementById('restart-game').addEventListener('click', () => {
             this.newGame();
+        });
+        
+        // Start game button event
+        document.getElementById('start-game').addEventListener('click', () => {
+            this.hideStartGame();
+            this.startGame();
+        });
+        
+        // Pause button event
+        document.getElementById('pause-game').addEventListener('click', () => {
+            this.pauseGame();
+        });
+        
+        // Resume game button event
+        document.getElementById('resume-game').addEventListener('click', () => {
+            this.resumeGame();
+        });
+        
+        // Restart game from pause menu event
+        document.getElementById('restart-game-pause').addEventListener('click', () => {
+            this.newGame();
+        });
+        
+        // Exit game button event
+        document.getElementById('exit-game').addEventListener('click', () => {
+            this.exitGame();
         });
     }
     
@@ -538,14 +608,70 @@ class MatrixRain {
     }
 }
 
+// Language translation data
+const translations = {
+    en: {
+        "subtitle": "Join the numbers and get to the 2048 tile!",
+        "newGame": "New Game",
+        "pauseGame": "Pause",
+        "themeLabel": "Theme:",
+        "modeLabel": "Mode:",
+        "languageLabel": "Language:",
+        "tech": "Tech",
+        "classic": "Classic",
+        "auto": "Auto",
+        "pc": "PC",
+        "mobile": "Mobile",
+        "gameOver": "Game Over!",
+        "finalScore": "Your final score:",
+        "tryAgain": "Try Again",
+        "letsGo": "Start Game",
+        "howToPlay": "HOW TO PLAY:",
+        "instructions": "Use your arrow keys to move the tiles. When two tiles with the same number touch, they merge into one!",
+        "score": "SCORE",
+        "best": "BEST",
+        "gamePaused": "Game Paused",
+        "resumeGame": "Resume Game",
+        "restartGame": "Restart Game",
+        "exitGame": "Exit Game"
+    },
+    zh: {
+        "subtitle": "合并数字，获得2048方块！",
+        "newGame": "新游戏",
+        "pauseGame": "暂停",
+        "themeLabel": "主题:",
+        "modeLabel": "模式:",
+        "languageLabel": "语言:",
+        "tech": "科技",
+        "classic": "经典",
+        "auto": "自动",
+        "pc": "电脑",
+        "mobile": "手机",
+        "gameOver": "游戏结束！",
+        "finalScore": "你的最终分数:",
+        "tryAgain": "再试一次",
+        "letsGo": "开始游戏",
+        "howToPlay": "游戏说明:",
+        "instructions": "使用方向键移动方块。当两个相同数字的方块接触时，它们会合并成一个！",
+        "score": "分数",
+        "best": "最佳",
+        "gamePaused": "游戏暂停",
+        "resumeGame": "继续游戏",
+        "restartGame": "重新开始",
+        "exitGame": "退出游戏"
+    }
+};
+
 // Theme switching functionality
 class ThemeManager {
     constructor() {
         this.currentTheme = localStorage.getItem('currentTheme') || 'tech';
         this.currentMode = localStorage.getItem('currentMode') || 'auto';
+        this.currentLanguage = localStorage.getItem('currentLanguage') || 'zh';
         this.matrixRain = null;
         this.initializeTheme();
         this.initializeMode();
+        this.initializeLanguage();
         this.bindEvents();
     }
     
@@ -609,6 +735,68 @@ class ThemeManager {
         }
     }
     
+    initializeLanguage() {
+        // Set the initial language in the dropdown
+        const languageSelect = document.getElementById('language-select');
+        if (languageSelect) {
+            languageSelect.value = this.currentLanguage;
+        }
+        // Apply translations
+        this.translate();
+    }
+    
+    switchLanguage(language) {
+        this.currentLanguage = language;
+        localStorage.setItem('currentLanguage', language);
+        this.translate();
+    }
+    
+    translate() {
+        const lang = this.currentLanguage;
+        
+        // Apply translations to all text elements
+        document.querySelector('.subtitle').textContent = translations[lang]['subtitle'];
+        document.getElementById('new-game').textContent = translations[lang]['newGame'];
+        document.querySelector('.theme-switch label').textContent = translations[lang]['themeLabel'];
+        document.querySelector('.mode-switch label').textContent = translations[lang]['modeLabel'];
+        document.querySelector('.language-switch label').textContent = translations[lang]['languageLabel'];
+        
+        // Update select options
+        const themeSelect = document.getElementById('theme-select');
+        themeSelect.options[0].text = translations[lang]['tech'];
+        themeSelect.options[1].text = translations[lang]['classic'];
+        
+        const modeSelect = document.getElementById('mode-select');
+        modeSelect.options[0].text = translations[lang]['auto'];
+        modeSelect.options[1].text = translations[lang]['pc'];
+        modeSelect.options[2].text = translations[lang]['mobile'];
+        
+        // Update game over overlay
+        document.querySelector('#game-overlay h2').textContent = translations[lang]['gameOver'];
+        document.querySelector('#game-overlay p').innerHTML = `${translations[lang]['finalScore']} <span id="final-score">0</span>`;
+        document.getElementById('restart-game').textContent = translations[lang]['tryAgain'];
+        
+        // Update start game button
+        document.getElementById('start-game').textContent = translations[lang]['letsGo'];
+        
+        // Update pause button
+        document.getElementById('pause-game').textContent = translations[lang]['pauseGame'];
+        
+        // Update pause menu
+        document.querySelector('#pause-menu-overlay h2').textContent = translations[lang]['gamePaused'];
+        document.getElementById('resume-game').textContent = translations[lang]['resumeGame'];
+        document.getElementById('restart-game-pause').textContent = translations[lang]['restartGame'];
+        document.getElementById('exit-game').textContent = translations[lang]['exitGame'];
+        
+        // Update how to play section
+        document.querySelector('.how-to-play h3').textContent = translations[lang]['howToPlay'];
+        document.querySelector('.how-to-play p').textContent = translations[lang]['instructions'];
+        
+        // Update score labels
+        document.querySelector('.score-label').textContent = translations[lang]['score'];
+        document.querySelector('.best-label').textContent = translations[lang]['best'];
+    }
+    
     getFullClassName() {
         let className = '';
         if (this.currentTheme === 'classic') className += 'theme-classic';
@@ -625,6 +813,12 @@ class ThemeManager {
         const modeSelect = document.getElementById('mode-select');
         modeSelect.addEventListener('change', (e) => {
             this.switchMode(e.target.value);
+        });
+        
+        // Language switch event
+        const languageSelect = document.getElementById('language-select');
+        languageSelect.addEventListener('change', (e) => {
+            this.switchLanguage(e.target.value);
         });
     }
 }
